@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.csmall.passport.mapper.AdminMapper">
+
+<!--    <resultMap id="ListResultMap"-->
+<!--               type="cn.tedu.csmall.product.pojo.vo.AlbumListItemVO">-->
+<!--        <id column="id" property="id"/>-->
+<!--        <result column="name" property="name"/>-->
+<!--        <result column="description" property="description"/>-->
+<!--        <result column="sort" property="sort"/>-->
+<!--    </resultMap>-->
+
+<!--    <sql id="ListQueryFields">-->
+<!--        <if test="true">-->
+<!--            id, name, description, sort-->
+<!--        </if>-->
+<!--    </sql>-->
+
+    <!--int insert(Admin admin);-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ams_admin(
+            username, password, nickname, avatar, phone,
+            email, description, enable, last_login_ip, login_count,
+            gmt_last_login
+        )VALUES (
+            #{username}, #{password}, #{nickname}, #{avatar}, #{phone},
+            #{email}, #{description}, #{enable}, #{lastLoginIp}, #{loginCount},
+            #{gmtLastLogin}
+        )
+    </insert>
+
+    <!--int deleteById(long id);-->
+    <delete id="deleteById">
+        DELETE FROM ams_admin WHERE id=#{id}
+    </delete>
+
+    <!--int updateById(Admin admin);-->
+    <update id="updateById">
+        Update ams_admin
+        <set>
+            <if test="username!=null">
+                username=#{username},
+            </if>
+            <if test="password!=null">
+                password=#{password},
+            </if>
+            <if test="nickname!=null">
+                nickname=#{nickname},
+            </if>
+            <if test="avatar!=null">
+                avatar=#{avatar},
+            </if>
+            <if test="phone!=null">
+                phone=#{phone},
+            </if>
+            <if test="email!=null">
+                email=#{email},
+            </if>
+            <if test="description!=null">
+                description=#{description},
+            </if>
+            <if test="enable!=null">
+                enable=#{enable},
+            </if>
+            <if test="lastLoginIp!=null">
+                last_login_ip=#{lastLoginIp},
+            </if>
+            <if test="loginCount!=null">
+                login_count=#{loginCount},
+            </if>
+            <if test="gmtLastLogin!=null">
+                gmt_last_login=#{gmtLastLogin},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <!--int countByUserName(String username);-->
+    <select id="countByUserName" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            ams_admin
+        WHERE
+            username=#{username}
+    </select>
+
+    <!--int countByEmail(String Email);-->
+    <select id="countByEmail" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            ams_admin
+        WHERE
+            email=#{Email}
+    </select>
+
+    <!--int countByPhone(String phone);-->
+    <select id="countByPhone" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            ams_admin
+        WHERE
+            phone=#{phone}
+    </select>
+
+    <resultMap id="StandardResultMap" type="cn.tedu.csmall.passport.pojo.vo.AdminStandardVO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
+        <result column="avatar" property="avatar"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="description" property="description"/>
+        <result column="enable" property="enable"/>
+        <result column="last_login_ip" property="lastLoginIp"/>
+        <result column="login_count" property="loginCount"/>
+        <result column="gmt_last_login" property="gmtLastLogin"/>
+    </resultMap>
+    <sql id="StandardField">
+        <if test="true">
+            id,username, nickname, avatar, phone,
+            email, description, enable, last_login_ip, login_count,
+            gmt_last_login
+        </if>
+    </sql>
+    <!--AdminStandardVO getStandardById(long id);-->
+    <select id="getStandardById" resultMap="StandardResultMap">
+        SELECT
+            <include refid="StandardField"/>
+        FROM
+            ams_admin
+        WHERE
+            id=#{id}
+    </select>
+
+    <resultMap id="ListResultMap" type="cn.tedu.csmall.passport.pojo.vo.AdminListItemVO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="avatar" property="avatar"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="description" property="description"/>
+        <result column="enable" property="enable"/>
+        <result column="last_login_ip" property="lastLoginIp"/>
+        <result column="login_count" property="loginCount"/>
+        <result column="gmt_last_login" property="gmtLastLogin"/>
+    </resultMap>
+    <sql id="ListQueryFields">
+        <if test="true">
+            id,username, nickname, avatar, phone,
+            email, description, enable, last_login_ip, login_count,
+            gmt_last_login
+        </if>
+    </sql>
+    <!--List<AdminListItemVO> list();-->
+    <select id="list" resultMap="ListResultMap">
+        SELECT
+            <include refid="ListQueryFields"/>
+        FROM
+            ams_admin
+        ORDER BY
+            enable DESC ,id ASC
+    </select>
+
+
+
+
+
+</mapper>
