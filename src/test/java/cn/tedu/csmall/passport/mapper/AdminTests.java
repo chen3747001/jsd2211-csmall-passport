@@ -5,6 +5,7 @@ import cn.tedu.csmall.passport.pojo.dto.AdminAddNewDTO;
 import cn.tedu.csmall.passport.pojo.entity.Admin;
 import cn.tedu.csmall.passport.pojo.entity.AdminRole;
 import cn.tedu.csmall.passport.pojo.vo.AdminListItemVO;
+import cn.tedu.csmall.passport.pojo.vo.AdminLoginInfoVO;
 import cn.tedu.csmall.passport.pojo.vo.AdminStandardVO;
 import cn.tedu.csmall.passport.service.IAdminService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +35,11 @@ public class AdminTests {
     @Test
     void testAddNew(){
         AdminAddNewDTO dto=new AdminAddNewDTO();
-        dto.setUsername("zhuzhu");
-        dto.setEmail("zhuzhu@qq.com");
-        dto.setPhone("182");
+        dto.setUsername("zhuzhuchen");
+        dto.setEmail("zhuzhuchen@qq.com");
+        dto.setPhone("182123");
+        dto.setRoleIds(new long[]{2L,3L});
+        dto.setPassword("123456");
 
         try{
             service.addNew(dto);
@@ -64,9 +67,20 @@ public class AdminTests {
 
     @Test
     void testDeleteById(){
-        Long id=13L;
+        long id=29L;
         int i = mapper.deleteById(id);
         log.info("受影响的行数是：{}",i);
+    }
+
+    @Test
+    void testServiceDeleteById(){
+        long id=30L;
+        try {
+            service.deleteById(id);
+            log.info("tests-删除用户数据成功，id为{}",id);
+        } catch (ServiceException e) {
+            log.info("tests-{}",e.getMessage());
+        }
     }
 
     @Test
@@ -79,16 +93,7 @@ public class AdminTests {
         log.info("受影响的行数是：{}",rows);
     }
 
-    @Test
-    void testServiceDeleteById(){
-        long id=12L;
-        try {
-            service.deleteById(id);
-            log.info("tests-删除用户数据成功，id为{}",id);
-        } catch (ServiceException e) {
-            log.info("tests-{}",e.getMessage());
-        }
-    }
+
 
     @Test
     void testServiceEnable(){
@@ -152,7 +157,15 @@ public class AdminTests {
     void testServiceList(){
         List<AdminListItemVO> list=service.list();
         for(AdminListItemVO vo : list){
-            log.info("data is:{}",vo.toString());
+//            log.info("data is:{}",vo.toString());
+            System.out.println(vo.toString());
         }
+    }
+
+    @Test
+    void testgetLoginInfoByUsername(){
+        String username="root";
+        AdminLoginInfoVO loginInfoByUsername = mapper.getLoginInfoByUsername(username);
+        log.info("data is: {}",loginInfoByUsername.toString());
     }
 }

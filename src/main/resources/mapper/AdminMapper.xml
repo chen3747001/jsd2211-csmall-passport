@@ -167,8 +167,49 @@
             enable DESC ,id ASC
     </select>
 
+    <!-- 当涉及1个多查询时，需要使用collection标签配置List集合类型的属性 -->
+    <!-- collection标签的property属性：类中List集合的属性的名称 -->
+    <!-- collection标签的ofType属性：类中List集合的元素类型的全限定名 -->
+    <!-- collection标签的子级：需要配置如何创建出一个个元素对象 -->
+    <!-- constructor标签：将通过构造方法来创建对象 -->
+    <!-- constructor标签子级的arg标签：配置构造方法的参数 -->
+    <resultMap id="LoginInfo" type="cn.tedu.csmall.passport.pojo.vo.AdminLoginInfoVO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="enable" property="enable"/>
+        <collection property="permissions" ofType="java.lang.String">
+            <!--<constructor>
+                <arg column="value"/>
+            </constructor>-->
+            <result column="value"/>
+        </collection>
+    </resultMap>
+    <sql id="LoginInfoFields">
+        <if test="true">
+            ams_admin.id,
+            ams_admin.username,
+            ams_admin.password,
+            ams_admin.enable,
+            ams_permission.value
+        </if>
+    </sql>
+    <!--AdminLoginInfoVO getLoginInfoByUsername(String username);-->
+    <select id="getLoginInfoByUsername" resultMap="LoginInfo">
+        SELECT
+            <include refid="LoginInfoFields"/>
+        FROM ams_admin
+         LEFT JOIN ams_admin_role
+                   ON ams_admin.id=ams_admin_role.admin_id
+         LEFT JOIN ams_role
+                   ON ams_role.id=ams_admin_role.role_id
+         LEFT JOIN ams_role_permission
+                   ON ams_role.id=ams_role_permission.role_id
+         LEFT JOIN ams_permission
+                   ON ams_permission.id=ams_role_permission.permission_id
+        WHERE username=#{username}
 
-
+    </select>
 
 
 </mapper>

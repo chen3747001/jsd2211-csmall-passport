@@ -2,6 +2,7 @@ package cn.tedu.csmall.passport.mapper;
 
 import cn.tedu.csmall.passport.pojo.entity.Admin;
 import cn.tedu.csmall.passport.pojo.vo.AdminListItemVO;
+import cn.tedu.csmall.passport.pojo.vo.AdminLoginInfoVO;
 import cn.tedu.csmall.passport.pojo.vo.AdminStandardVO;
 import org.springframework.stereotype.Repository;
 
@@ -66,5 +67,12 @@ public interface AdminMapper {
      * @return 管理员列表
      */
     List<AdminListItemVO> list();
+
+    /**
+     * 根据用户名查找用户的登录信息
+     * @param username 输入的用户名
+     * @return 用户名登录信息
+     */
+    AdminLoginInfoVO getLoginInfoByUsername(String username);
 
 }

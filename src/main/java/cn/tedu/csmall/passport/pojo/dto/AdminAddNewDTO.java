@@ -63,7 +63,7 @@ public class AdminAddNewDTO implements Serializable {
     /**
      * 尝试添加的管理员id列表
      */
-    @ApiModelProperty(value = "角色列表")
+    @ApiModelProperty(value = "角色列表",required = true)
     private long[] roleIds;
 
 }

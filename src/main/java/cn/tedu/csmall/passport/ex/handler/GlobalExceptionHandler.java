@@ -5,6 +5,10 @@ import cn.tedu.csmall.passport.ex.ServiceException;
 import cn.tedu.csmall.passport.web.JsonResult;
 import cn.tedu.csmall.passport.web.ServiceCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,12 +41,12 @@ public class GlobalExceptionHandler {
         //显示单个错误
         String massage=e.getFieldError().getDefaultMessage();
         return JsonResult.fail(ServiceCode.ERR_BAD_REQUEST,massage);
-
-        //显示多个错误
-//        StringBuilder stringBuilder=new StringBuilder();
-//        List<FieldError> fieldErrors = e.getFieldErrors();
-//        for(FieldError fieldError : fieldErrors){
-//            stringBuilder.append(fieldError.getDefaultMessage());
+//
+//        //显示多个错误
+////        StringBuilder stringBuilder=new StringBuilder();
+////        List<FieldError> fieldErrors = e.getFieldErrors();
+////        for(FieldError fieldError : fieldErrors){
+////            stringBuilder.append(fieldError.getDefaultMessage());
 //        }
 //        return JsonResult.fail(ServiceCode.ERR_BAD_REQUEST,stringBuilder.toString());
     }
@@ -67,9 +71,35 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public String handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
+    public JsonResult<Void> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
         log.info("捕获到异常 HttpRequestMethodNotSupportedException: {}",e.getMessage());
-        return "请求错误，非法访问";
+        return JsonResult.fail(ServiceCode.ERR_BAD_REQUEST,"请求错误，非法访问");
+    }
+
+
+
+    /**
+     * 参数异常为注解中异常的共有父类异常
+     * @param e 共有父类异常
+     * @return JSON
+     */
+    @ExceptionHandler({
+            InternalAuthenticationServiceException.class,
+            BadCredentialsException.class
+    })
+    public JsonResult<Void> handleAuthenticationException(AuthenticationException e){
+        log.debug("捕获到异常 AuthenticationException");
+        log.debug("异常类型：{}",e.getClass().getName());
+        log.debug("异常信息：{}",e.getMessage());
+        String message="登录失败，用户名或者密码错误";
+        return JsonResult.fail(ServiceCode.ERR_UNAUTHORIZED,message);
+    }
+
+    @ExceptionHandler()
+    public JsonResult<Void> handleDisabledException(DisabledException e){
+        log.debug("捕获到异常 DisabledException: {}",e.getMessage());
+        String message="登录失败，此管理员账号已经被禁用";
+        return JsonResult.fail(ServiceCode.ERR_UNAUTHORIZED_DISABLED,message);
     }
 
     @ExceptionHandler

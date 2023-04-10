@@ -61,4 +61,5 @@ public class AdminListItemVO implements Serializable {
      * 最后登录时间（冗余）
      */
     private LocalDateTime gmtLastLogin;
+
 }

@@ -10,4 +10,10 @@ logging:
   level:
     cn.tedu.csmall: trace
 
+# custom configuration
+csmall:
+  jwt:
+    secret-key : sd>/fd{}s1:2S_S+DF213sad12sas12ca2,2
+    duration-in-minute : 14400
+
 

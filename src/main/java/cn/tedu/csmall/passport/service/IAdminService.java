@@ -1,6 +1,7 @@
 package cn.tedu.csmall.passport.service;
 
 import cn.tedu.csmall.passport.pojo.dto.AdminAddNewDTO;
+import cn.tedu.csmall.passport.pojo.dto.AdminLoginDTO;
 import cn.tedu.csmall.passport.pojo.vo.AdminListItemVO;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,13 @@ import java.util.List;
 @Transactional
 public interface IAdminService {
     /**
+     * 管理员登录
+     * @param dto 封装了管理员的登录信息
+     * @return JWT数据
+     */
+    String login(AdminLoginDTO dto);
+
+    /**
      * 添加新管理员
      * @param dto 管理员的数据
      */
@@ -19,9 +27,11 @@ public interface IAdminService {
 
     /**
      * 根据id删除用户数据
+     *
      * @param id 用户id
+     * @return
      */
-    void deleteById(long id);
+    int deleteById(long id);
 
     /**
      * 启用管理员
